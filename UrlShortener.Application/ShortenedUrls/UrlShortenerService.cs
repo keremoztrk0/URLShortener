@@ -14,9 +14,15 @@ namespace UrlShortener.Application.ShortenedUrls
 {
     public class UrlShortenerService(IUrlShortenerDbContext dbContext, IHttpContextAccessor httpContextAccessor) : IUrlShortenerService
     {
-        public Task DeleteShortenedUrl(int id, CancellationToken cancellation)
+        public async Task DeleteShortenedUrl(int id, CancellationToken cancellation)
         {
-            throw new NotImplementedException();
+            var shortenedUrl = await dbContext.ShortenedUrls.FirstOrDefaultAsync(m => m.Id == id);
+            if (shortenedUrl is null)
+            {
+                throw URLShortenerApplicationException.ShortenedUrlNotFound();
+            }
+            dbContext.ShortenedUrls.Remove(shortenedUrl);
+            await dbContext.SaveChangesAsync(cancellation);
         }
 
         public async Task<ShortenedUrlDto> GenerateAndSaveShortenedUrl(ShortenedUrlCreateDto createDto, CancellationToken cancellation)
@@ -38,7 +44,7 @@ namespace UrlShortener.Application.ShortenedUrls
 
         private static void ValidateUrl(string url)
         {
-            
+
             var result = Uri.TryCreate(url, UriKind.Absolute, out _);
             if (!result)
             {
@@ -51,11 +57,6 @@ namespace UrlShortener.Application.ShortenedUrls
             ShortenedUrl? url = await dbContext.ShortenedUrls.FirstOrDefaultAsync(m => m.Code == code);
             if (url == null) throw URLShortenerApplicationException.ShortenedUrlNotFound();
             return url.OriginalUrl;
-        }
-
-        public Task UpdateUrl(int id, string url, CancellationToken cancellation)
-        {
-            throw new NotImplementedException();
         }
 
         private ShortenedUrlDto MapToShortenedUrlDto(ShortenedUrl url)

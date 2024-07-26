@@ -28,5 +28,11 @@ namespace URLShortener.API.Controllers
             var result = await urlShortenerService.GetAll(cancellationToken);
             return Ok(result);
         }
+        [HttpDelete("")]
+        public async Task<ActionResult> DeleteUrl(int id, CancellationToken cancellationToken)
+        {
+            await urlShortenerService.DeleteShortenedUrl(id, cancellationToken);
+            return Ok();
+        }
     }
 }
