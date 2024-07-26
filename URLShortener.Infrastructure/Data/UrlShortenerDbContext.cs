@@ -13,7 +13,8 @@ namespace URLShortener.Infrastructure.Data
     internal class UrlShortenerDbContext : DbContext, IUrlShortenerDbContext
     {
         public UrlShortenerDbContext(DbContextOptions options) : base(options)
-        { }
+        { 
+        }
         public DbSet<ShortenedUrl> ShortenedUrls { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
