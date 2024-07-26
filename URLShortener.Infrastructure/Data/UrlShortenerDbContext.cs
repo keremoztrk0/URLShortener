@@ -13,7 +13,7 @@ namespace URLShortener.Infrastructure.Data
     internal class UrlShortenerDbContext : DbContext, IUrlShortenerDbContext
     {
         public UrlShortenerDbContext(DbContextOptions options) : base(options)
-        { 
+        {
         }
         public DbSet<ShortenedUrl> ShortenedUrls { get; set; }
 
@@ -27,8 +27,6 @@ namespace URLShortener.Infrastructure.Data
                 .HasMaxLength(ShortenedUrlConsts.MaxCodeLength);
             modelBuilder.Entity<ShortenedUrl>()
                 .HasIndex(m => m.Code);
-            modelBuilder.Entity<ShortenedUrl>()
-                .HasIndex(m => m.OriginalUrl);
 
         }
     }
