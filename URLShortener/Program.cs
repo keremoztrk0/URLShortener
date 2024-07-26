@@ -1,4 +1,5 @@
 using UrlShortener.Application;
+using URLShortener.API.Middlewares;
 using URLShortener.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddScoped<ExceptionHandlerMiddleware>();
 
 builder.Services
     .RegisterInfrastructure(builder.Configuration)
@@ -28,6 +29,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.MapControllers();
 
